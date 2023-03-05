@@ -20,7 +20,9 @@ export class AuthService {
       await this.prisma.user.create({
         data: {
           email: dto.email,
+          name: dto.name,
           password: hashed,
+          confirm_password: hashed,
         },
       });
       return {
@@ -35,7 +37,7 @@ export class AuthService {
       throw error;
     }
   }
-  async signIn(dto: AuthDto) {
+  async signIn(dto: AuthDto): Promise<Jwt> {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,

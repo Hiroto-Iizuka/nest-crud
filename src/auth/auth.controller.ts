@@ -6,13 +6,12 @@ import {
   HttpStatus,
   Res,
   Req,
-  Get,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto } from './dto/authSignUp.dto';
 import { AuthSignInDto } from './dto/authSignIn.dto';
-import { Csrf, Msg } from './interfaces/auth.interface';
+import { Msg } from './interfaces/auth.interface';
 
 @Controller('auth')
 export class AuthController {

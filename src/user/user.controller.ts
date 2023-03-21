@@ -11,7 +11,6 @@ export class UserController {
 
   @Get()
   getSigninUser(@Req() req: Request): Omit<User, 'password'> {
-    console.log(req.user);
     return req.user;
   }
 }

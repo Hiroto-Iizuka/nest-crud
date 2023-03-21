@@ -27,7 +27,6 @@ export class AuthService {
             email: dto.email,
             name: dto.name,
             password: hashed,
-            confirm_password: hashed,
           },
         });
         return {

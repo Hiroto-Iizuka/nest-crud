@@ -15,5 +15,4 @@ model User {
   email   String?   @unique
   name    String?
   password String?
-  confirm_password String?
 }

@@ -16,26 +16,35 @@ export class AuthService {
     private readonly config: ConfigService,
   ) {}
   async signUp(dto: AuthSignUpDto): Promise<Msg> {
-    const hashed = await bcrypt.hash(dto.password, 12);
-    try {
-      await this.prisma.user.create({
-        data: {
-          email: dto.email,
-          name: dto.name,
-          password: hashed,
-          confirm_password: hashed,
-        },
-      });
-      return {
-        message: 'ok',
-      };
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException('This email is already taken');
+    const existUser = await this.prisma.user.findFirst({
+      where: { email: dto.email },
+    });
+    if (!existUser) {
+      const hashed = await bcrypt.hash(dto.password, 12);
+      try {
+        await this.prisma.user.create({
+          data: {
+            email: dto.email,
+            name: dto.name,
+            password: hashed,
+            confirm_password: hashed,
+          },
+        });
+        return {
+          message: 'ok',
+        };
+      } catch (error) {
+        if (error instanceof PrismaClientKnownRequestError) {
+          if (error.code === 'P2002') {
+            throw new ForbiddenException('This email is already taken');
+          }
         }
+        throw error;
       }
-      throw error;
+    } else {
+      return {
+        message: 'Email already exists',
+      };
     }
   }
   async signIn(dto: AuthSignInDto): Promise<Jwt> {

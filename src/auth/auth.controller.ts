@@ -11,7 +11,7 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto } from './dto/authSignUp.dto';
 import { AuthSignInDto } from './dto/authSignIn.dto';
-import { Msg } from './interfaces/auth.interface';
+import { Msg, Jwt } from './interfaces/auth.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -27,7 +27,7 @@ export class AuthController {
   async signin(
     @Body() dto: AuthSignInDto,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<Msg> {
+  ): Promise<Msg | Jwt> {
     const jwt = await this.authService.signIn(dto);
     res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
@@ -37,6 +37,7 @@ export class AuthController {
     });
     return {
       message: 'ok',
+      accessToken: jwt.accessToken,
     };
   }
 

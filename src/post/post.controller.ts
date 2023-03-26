@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Patch,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,9 +15,10 @@ import { Request } from 'express';
 // commonのPostと名前が被るため
 import { Post as typePost } from '@prisma/client';
 import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @UseGuards(AuthGuard('jwt'))
-@Controller('posts')
+@Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
@@ -39,5 +41,14 @@ export class PostController {
     @Body() dto: CreatePostDto,
   ): Promise<typePost> {
     return this.postService.createPost(req.user.id, dto);
+  }
+
+  @Patch(':id')
+  updatePostById(
+    @Req() req: Request,
+    @Param('id', ParseIntPipe) postId: number,
+    @Body() dto: UpdatePostDto,
+  ): Promise<typePost> {
+    return this.postService.updatePostById(req.user.id, postId, dto);
   }
 }

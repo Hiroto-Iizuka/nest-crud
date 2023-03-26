@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { Post } from './interfaces/post.interface';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { Post } from '@prisma/client';
 
 @Injectable()
 export class PostService {
@@ -28,5 +29,31 @@ export class PostService {
       },
     });
     return post;
+  }
+
+  async updatePostById(
+    authorId: number,
+    postId: number,
+    dto: UpdatePostDto,
+  ): Promise<Post> {
+    const post = await this.prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+
+    console.log(post);
+
+    if (!post || post.authorId !== authorId)
+      throw new ForbiddenException('No permission to update');
+
+    return this.prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        ...dto,
+      },
+    });
   }
 }

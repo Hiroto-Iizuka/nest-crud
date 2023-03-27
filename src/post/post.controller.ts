@@ -27,6 +27,7 @@ export class PostController {
 
   @Get()
   async getPosts(): Promise<typePost[]> {
+    console.log('test');
     return await this.postService.getPosts();
   }
 
@@ -47,12 +48,12 @@ export class PostController {
   }
 
   @Patch(':id')
-  updatePostById(
+  async updatePostById(
     @Req() req: Request,
     @Param('id', ParseIntPipe) postId: number,
     @Body() dto: UpdatePostDto,
   ): Promise<typePost> {
-    return this.postService.updatePostById(req.user.id, postId, dto);
+    return await this.postService.updatePostById(req.user.id, postId, dto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

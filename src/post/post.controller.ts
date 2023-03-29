@@ -32,19 +32,19 @@ export class PostController {
   }
 
   @Get(':id')
-  getPostById(
+  async getPostById(
     @Req() req: Request,
     @Param('id', ParseIntPipe) postId: number,
   ): Promise<typePost> {
-    return this.postService.getPostById(req.user.id, postId);
+    return await this.postService.getPostById(req.user.id, postId);
   }
 
   @Post()
-  createPost(
+  async createPost(
     @Req() req: Request,
     @Body() dto: CreatePostDto,
   ): Promise<typePost> {
-    return this.postService.createPost(req.user.id, dto);
+    return await this.postService.createPost(req.user.id, dto);
   }
 
   @Patch(':id')
@@ -58,10 +58,10 @@ export class PostController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  deletePostById(
+  async deletePostById(
     @Req() req: Request,
     @Param('id', ParseIntPipe) postId: number,
   ): Promise<void> {
-    return this.postService.deletePostById(req.user.id, postId);
+    return await this.postService.deletePostById(req.user.id, postId);
   }
 }

@@ -42,8 +42,6 @@ export class PostService {
       },
     });
 
-    console.log(post);
-
     if (!post || post.authorId !== authorId)
       throw new ForbiddenException('No permission to update');
 
@@ -57,7 +55,7 @@ export class PostService {
     });
   }
 
-  async deletePostById(authorId: number, postId: number): Promise<void> {
+  async deletePostById(authorId: number, postId: number): Promise<string> {
     const post = await this.prisma.post.findUnique({
       where: {
         id: postId,
@@ -72,5 +70,6 @@ export class PostService {
         id: postId,
       },
     });
+    return 'ok';
   }
 }

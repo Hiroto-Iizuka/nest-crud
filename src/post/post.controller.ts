@@ -27,7 +27,6 @@ export class PostController {
 
   @Get()
   async getPosts(): Promise<typePost[]> {
-    console.log('test');
     return await this.postService.getPosts();
   }
 
@@ -56,12 +55,13 @@ export class PostController {
     return await this.postService.updatePostById(req.user.id, postId, dto);
   }
 
-  @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.OK)
   @Delete(':id')
   async deletePostById(
     @Req() req: Request,
     @Param('id', ParseIntPipe) postId: number,
-  ): Promise<void> {
-    return await this.postService.deletePostById(req.user.id, postId);
+  ): Promise<string> {
+    await this.postService.deletePostById(req.user.id, postId);
+    return 'ok';
   }
 }

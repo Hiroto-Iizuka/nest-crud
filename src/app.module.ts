@@ -8,6 +8,9 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { PostService } from './post/post.service';
 import { PostController } from './post/post.controller';
+import { FavoriteController } from './favorite/favorite.controller';
+import { FavoriteService } from './favorite/favorite.service';
+import { FavoriteModule } from './favorite/favorite.module';
 
 @Module({
   imports: [
@@ -15,9 +18,10 @@ import { PostController } from './post/post.controller';
     AuthModule,
     UserModule,
     PostModule,
+    FavoriteModule,
     PrismaModule,
   ],
-  controllers: [AppController, PostController],
-  providers: [AppService, PostService],
+  controllers: [AppController, PostController, FavoriteController],
+  providers: [AppService, PostService, FavoriteService],
 })
 export class AppModule {}

@@ -64,7 +64,14 @@ export class PostService {
 
     if (!post || post.authorId !== authorId)
       throw new ForbiddenException('No permission to delete');
-
+    await this.prisma.favorite.delete({
+      where: {
+        userId_postId: {
+          userId: authorId,
+          postId: postId,
+        },
+      },
+    });
     await this.prisma.post.delete({
       where: {
         id: postId,

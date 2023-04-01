@@ -31,7 +31,7 @@ export class FavoriteController {
   @Delete(':id')
   async deleteFavorite(
     @Req() req: Request,
-    @Param('postId') postId: number,
+    @Param('id', ParseIntPipe) postId: number,
   ): Promise<string> {
     await this.favoriteService.deleteFavorite(req.user.id, postId);
     return 'ok';
